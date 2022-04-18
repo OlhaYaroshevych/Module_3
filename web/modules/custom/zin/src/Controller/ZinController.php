@@ -18,9 +18,9 @@ class ZinController extends ControllerBase {
    * Builds the response.
    */
   public function content() {
-    $element = array(
+    $element = [
       '#markup' => 'Hello! You can add here a photo of your cat.',
-    );
+    ];
     return $element;
   }
 
