@@ -1,0 +1,14 @@
+zin.cats:
+  path: '/zin/cats'
+  defaults:
+    _controller: '\Drupal\zin\Controller\ZinController::content'
+  requirements:
+    _permission: 'access content'
+
+zin.settings_form:
+  path: '/admin/config/system/zin'
+  defaults:
+    _title: 'zin settings'
+    _form: 'Drupal\zin\Form\SettingsForm'
+  requirements:
+    _permission: 'administer zin configuration'

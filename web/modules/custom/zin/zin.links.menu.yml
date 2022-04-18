@@ -1,0 +1,6 @@
+zin.settings_form:
+  title: zin
+  description: Configure zin.
+  parent: system.admin_config_system
+  route_name: zin.settings_form
+  weight: 10
