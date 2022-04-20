@@ -22,7 +22,7 @@ class CatForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['cat_name'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Your cats name:'),
+      '#title' => $this->t('Your cat\'s name:'),
       '#maxlength' => 32,
       '#description' => $this->t('Note that the name of your cat must be at least 2 characters in length. The maximum length of the field is 32 characters.'),
       '#required' => TRUE,
@@ -58,11 +58,5 @@ class CatForm extends FormBase {
   function callback($form, $form_state) {
     return $form['cat_name'];
   }
-
-  // public function __construct(TranslationInterface $string_translation) {
-  //   // You can skip injecting this service, the trait will fall back to \Drupal::translation()
-  //   // but it is recommended to do so, for easier testability,
-  //   $this->stringTranslation = $string_translation;
-  // }
 
 }
