@@ -12,3 +12,4 @@ zin.settings_form:
     _form: 'Drupal\zin\Form\SettingsForm'
   requirements:
     _permission: 'administer zin configuration'
+

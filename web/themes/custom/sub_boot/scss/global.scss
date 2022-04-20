@@ -20,6 +20,7 @@ header {
     #navbar-top {
         font-family: 'Square Peg', cursive;
         background-color: #0079C0 !important;
+        padding-right: 15%;
         a {
             font-size: 25px;
             font-weight: bold;
@@ -27,7 +28,24 @@ header {
     }
 }
 
+#sidebar_first {
+    display: none;
+}
+
 div.content {
     font-size: 30px;
     font-family: 'Square Peg', cursive;
+}
+
+div.process-heading {
+    font-size: 50px;
+    text-align: center;
+    &::before {
+        content: "\1F4F8";
+        margin-right: 10px;
+    }
+}
+
+#edit-cat-name--description {
+    color: white !important;
 }

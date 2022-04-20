@@ -18,10 +18,13 @@ class ZinController extends ControllerBase {
    * Builds the response.
    */
   public function content() {
-    $element = [
-      '#markup' => 'Hello! You can add here a photo of your cat.',
+    $build = [];
+    $build['heading'] = [
+      '#type' => 'markup',
+      '#markup' => '<div class="process-heading">' . $this->t('Hello! You can add here a photo of your cat.') . '</div>',
     ];
-    return $element;
+    $build['form'] = $this->formBuilder()->getForm('Drupal\zin\Form\CatForm');
+    return $build;
   }
 
 }
