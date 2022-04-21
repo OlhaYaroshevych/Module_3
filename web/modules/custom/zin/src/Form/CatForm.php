@@ -20,6 +20,10 @@ class CatForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['container'] = [
+      '#type' => 'container',
+      '#attributes' => ['id' => 'box-container'],
+    ];
     $form['cat_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Your cat\'s name:'),
@@ -32,6 +36,14 @@ class CatForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Add cat'),
       '#button_type' => 'primary',
+      '#ajax' => [
+        'callback' => '::ajaxSubmit',
+        'wrapper' => 'box-container',
+        'progress' => [
+          'type' => 'throbber',
+          'message' => t('Adding the cat\'s name..'),
+        ],        
+      ],  
     ];
     return $form;
   }
@@ -53,10 +65,21 @@ class CatForm extends FormBase {
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->messenger()->addStatus(t("Name of the cat was added!"));
+//    $this->messenger()->addStatus(t("Name of the cat was added!"));
   }
-  function callback($form, $form_state) {
-    return $form['cat_name'];
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function ajaxSubmit(array &$form, FormStateInterface $form_state) {
+    $element = $form['container'];
+    if ($form_state->hasAnyErrors()) {
+      return $element;
+    }
+    else {  
+      $this->messenger()->addStatus(t("Name of the cat was added!"));
+    }
+    return $element;
   }
 
 }
