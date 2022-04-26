@@ -55,10 +55,18 @@ div.process-heading {
     }
 }
 
-#edit-cat-name {
-    font-size: 30px;
+#edit-cat-name, #edit-email {
+    font-size: 25px;
 }
 
-#edit-cat-name--description {
+#edit-cat-name--description, #edit-email--description {
     color: white !important;
+}
+
+div.email-validation-message {
+    font-weight: bold;  
+}
+
+fieldset.form-type-email {
+    margin-bottom: 0px !important;
 }

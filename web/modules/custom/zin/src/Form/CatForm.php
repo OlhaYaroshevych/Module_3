@@ -9,12 +9,16 @@ namespace Drupal\zin\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
+//use Drupal\Core\StringTranslation\StringTranslationTrait;
+//use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CssCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+//use Drupal\Core\Ajax\MessageCommand;
 
 class CatForm extends FormBase {
   
-  use StringTranslationTrait;
+//  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -28,8 +32,23 @@ class CatForm extends FormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Your cat\'s name:'),
       '#maxlength' => 32,
-      '#description' => $this->t('Note that the name of your cat must be at least 2 characters in length. The maximum length of the field is 32 characters.'),
+      '#description' => $this->t('Note that the name of your cat must be at least 2 characters in length. The maximum length of the field is 32 characters'),
       '#required' => TRUE,
+    ];
+    $form['email'] = [
+      '#type' => 'email',
+      '#title' => $this -> t('Your e-mail:'),
+      '#description' => $this -> t('Please use only Latin letters, underscores or hyphens'),
+      '#required' => TRUE,
+      '#ajax' => [
+        'callback' => '::validateEmailAjax',
+        'event' => 'keyup',
+        'progress' => [
+          'type' => 'throbber',
+          'message' => t('Veryfying e-mail..'),
+        ],
+      ],
+      '#suffix' => '<div class="email-validation-message"></div>'
     ];
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
@@ -61,11 +80,39 @@ class CatForm extends FormBase {
     }
     if (strlen($form_state->getValue('cat_name')) > 32) {
       $form_state->setErrorByName('cat_name', $this->t('Name of the cat is too long.'));
+    }  
+  }
+
+  protected function validateEmail(array &$form, FormStateInterface $form_state) {
+    $email = $form_state->getValue('email');
+    $stableExpression = '/^[A-Za-z_\-]+@\w+(?:\.\w+)+$/';
+    if (preg_match($stableExpression, $email)){
+      return TRUE;
     }
+    return FALSE;
+  }
+
+  /**
+  * {@inheritdoc}
+  */
+  public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
+    $valid = $this->validateEmail($form, $form_state);
+    $response = new AjaxResponse();
+    if ($valid) {
+      $css = ['box-shadow' => 'inset 0 0 10px green'];
+      $message = $this->t('E-mail is valid.');
+    }
+    else {
+      $css = ['box-shadow' => 'inset 0 0 10px red'];
+      $message = $this->t('E-mail is not valid.');
+    }
+    $response->addCommand(new CssCommand('#edit-email', $css));
+    $response->addCommand(new HtmlCommand('.email-validation-message', $message));
+    return $response;
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
-//    $this->messenger()->addStatus(t("Name of the cat was added!"));
+    $this->messenger()->addStatus(t("Name of the cat was added!"));
   }
   
   /**
@@ -73,11 +120,10 @@ class CatForm extends FormBase {
    */
   public function ajaxSubmit(array &$form, FormStateInterface $form_state) {
     $element = $form['container'];
-    if ($form_state->hasAnyErrors()) {
+    $email = $form_state->getValue('email');
+    $stableExpression = '/^[A-Za-z_\-]+@\w+(?:\.\w+)+$/';
+    if (($form_state->hasAnyErrors()) || (!preg_match($stableExpression, $email))) {
       return $element;
-    }
-    else {  
-      $this->messenger()->addStatus(t("Name of the cat was added!"));
     }
     return $element;
   }
