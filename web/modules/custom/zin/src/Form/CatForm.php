@@ -9,17 +9,13 @@ namespace Drupal\zin\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-//use Drupal\Core\StringTranslation\StringTranslationTrait;
-//use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
-//use Drupal\Core\Ajax\MessageCommand;
+use Drupal\Core\Ajax\MessageCommand;
 
 class CatForm extends FormBase {
   
-//  use StringTranslationTrait;
-
   /**
    * {@inheritdoc}
    */
