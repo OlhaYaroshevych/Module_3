@@ -1,7 +1,8 @@
 zin.cats:
   path: '/zin/cats'
   defaults:
-    _controller: '\Drupal\zin\Controller\ZinController::content'
+    _form: '\Drupal\zin\Form\CatForm'	
+    _controller: '\Drupal\zin\Controller\ZinController::build'
   requirements:
     _permission: 'access content'
 

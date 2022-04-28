@@ -13,6 +13,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\MessageCommand;
+use Drupal\file\Entity\File;
 
 class CatForm extends FormBase {
   
@@ -48,15 +49,14 @@ class CatForm extends FormBase {
     ];
     $form['my_file']['image_dir'] = [
       '#type' => 'managed_file',
-      '#title' => 'Upload image:',
+      '#title' => $this -> t('Upload image:'),
       '#description' => $this->t('Only JPG, PNG and JPEG files are allowed. Size limit is 2MB'),
       '#required' => TRUE,
       '#upload_valiators' => [
-        //'file_validate_is_image' => [],
         'file_validate_extensions' => ['jpeg jpg png'],
         'file_validate_size' => [25600000],
       ],
-      '#upload_location' => 'public://'
+      '#upload_location' => 'public://images',
     ];
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
@@ -91,7 +91,7 @@ class CatForm extends FormBase {
     }  
     $img = $form_state->getValue(['my_file' => 'image_dir']);
     if (empty($img)) {
-      $form_state->setErrorByName('my_file', $this->t('No image available'));
+      $form_state->setErrorByName('my_file', $this->t('No image found'));
     }
   }
 
@@ -125,6 +125,18 @@ class CatForm extends FormBase {
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->messenger()->addStatus(t("Name of the cat was added!"));
+    $database = \Drupal::database();
+//    $picture = $form_state->getValue('my_file');
+//    $file = File::load($picture[0]);
+//    $file->setPermanent();
+//    $file->save();
+    $database->insert('zin')->fields([
+      'cat_name' => $form_state->getValue('cat_name'),
+      'email' => $form_state->getValue('email'),
+//    'cat_image' => $picture[0],
+      'timestamp' => date('d-m-Y H:i:s', strtotime('+3 hour')),
+    ])
+      ->execute();
   }
   
   /**
