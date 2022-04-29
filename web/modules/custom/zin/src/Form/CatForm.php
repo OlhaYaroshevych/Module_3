@@ -25,7 +25,7 @@ class CatForm extends FormBase {
       '#type' => 'container',
       '#attributes' => ['id' => 'box-container'],
     ];
-    $form['cat_name'] = [
+    $form['name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Your cat\'s name:'),
       '#maxlength' => 32,
@@ -47,25 +47,27 @@ class CatForm extends FormBase {
       ],
       '#suffix' => '<div class="email-validation-message"></div>'
     ];
-    $form['my_file']['image_dir'] = [
+    $form['image'] = [
       '#type' => 'managed_file',
       '#title' => $this -> t('Upload image:'),
+      '#name' => 'image',
       '#description' => $this->t('Only JPG, PNG and JPEG files are allowed. Size limit is 2MB'),
       '#required' => TRUE,
       '#upload_valiators' => [
         'file_validate_extensions' => ['jpeg jpg png'],
         'file_validate_size' => [25600000],
       ],
-      '#upload_location' => 'public://images',
+      '#upload_location' => 'public://images/',
     ];
     $form['actions']['#type'] = 'actions';
-    $form['actions']['submit'] = [
+    $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Add cat'),
       '#button_type' => 'primary',
       '#ajax' => [
-        'callback' => '::ajaxSubmit',
+        'callback' => '::submitAjax',
         'wrapper' => 'box-container',
+        'event' => 'click',
         'progress' => [
           'type' => 'throbber',
           'message' => t('Adding the cat\'s name..'),
@@ -83,15 +85,15 @@ class CatForm extends FormBase {
   }
 
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    if (strlen($form_state->getValue('cat_name')) < 2) {
-      $form_state->setErrorByName('cat_name', $this->t('Name of the cat is too short.'));
+    if (strlen($form_state->getValue('name')) < 2) {
+      $form_state->setErrorByName('name', $this->t('Name of the cat is too short.'));
     }
-    if (strlen($form_state->getValue('cat_name')) > 32) {
-      $form_state->setErrorByName('cat_name', $this->t('Name of the cat is too long.'));
+    if (strlen($form_state->getValue('name')) > 32) {
+      $form_state->setErrorByName('name', $this->t('Name of the cat is too long.'));
     }  
-    $img = $form_state->getValue(['my_file' => 'image_dir']);
-    if (empty($img)) {
-      $form_state->setErrorByName('my_file', $this->t('No image found'));
+    $my_file = $form_state->getValue('image');
+    if (empty($my_file)) {
+      $form_state->setErrorByName('image', $this->t('No image found'));
     }
   }
 
@@ -124,17 +126,20 @@ class CatForm extends FormBase {
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->messenger()->addStatus(t("Name of the cat was added!"));
+    $image = $form_state->getValue('image');
+    //If the image is uploaded, save it in the database
+    if ($image) {
+      $file = File::load($image[0]);
+      $file->setPermanent();
+      $file->save();
+    }
+    //Database connection
     $database = \Drupal::database();
-//    $picture = $form_state->getValue('my_file');
-//    $file = File::load($picture[0]);
-//    $file->setPermanent();
-//    $file->save();
-    $database->insert('zin')->fields([
-      'cat_name' => $form_state->getValue('cat_name'),
+    $database->insert('zin')
+    ->fields([
+      'name' => $form_state->getValue('name'),
       'email' => $form_state->getValue('email'),
-//    'cat_image' => $picture[0],
-      'timestamp' => date('d-m-Y H:i:s', strtotime('+3 hour')),
+      'image' => $image[0],
     ])
       ->execute();
   }
@@ -142,14 +147,22 @@ class CatForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function ajaxSubmit(array &$form, FormStateInterface $form_state) {
-    $element = $form['container'];
-    $email = $form_state->getValue('email');
-    $stableExpression = '/^[A-Za-z_\-]+@\w+(?:\.\w+)+$/';
-    if (($form_state->hasAnyErrors()) || (!preg_match($stableExpression, $email))) {
-      return $element;
+  public function submitAjax(array &$form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+    // Modal message about errors in form
+    if ($form_state->getErrors()) {
+      foreach ($form_state->getErrors() as $err) {
+        $response->addCommand(new MessageCommand($err, NULL, ['type' => 'error']));
+      }
+      $form_state->clearErrors();
+    }  
+    // Modal message about successful data save.
+    else {
+      $response->addCommand(new MessageCommand($this->t('Name of the cat was added!'), NULL, ['type' => 'status'], TRUE));
+      $form_state->setRebuild(TRUE);
     }
-    return $element;
+    $this->messenger()->deleteAll();
+    return $response;
   }
 
 }

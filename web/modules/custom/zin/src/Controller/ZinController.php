@@ -29,9 +29,9 @@ class ZinController extends ControllerBase {
       '#markup' => '<div class="process-heading">' . $this->t('Hello! You can add here a photo of your cat.') . '</div>',
     ];
     $heading = [
-      'cat_name' => t('Cat\'s name'),
+      'name' => t('Cat\'s name'),
       'email' => t('E-mail'),
-      'cat_image' => t('Cat\'s image'),
+      'image' => t('Cat\'s image'),
       'timestamp' => t('Submitting date'),
     ];
     $cats['table'] = [
@@ -43,24 +43,19 @@ class ZinController extends ControllerBase {
   }
 
   public function getCatsInfo() {
-    $output = \Drupal::database()->select('zin', 'm')
-      ->fields('m', ['cat_name', 'email', 'cat_image', 'timestamp'])
+    $output = \Drupal::database()->select('zin', 'z')
+      ->fields('z', ['name', 'email', 'image', 'timestamp'])
       ->orderBy('id', 'DESC')
       ->execute();
     $data = [];
     foreach ($output as $cat) {
       $data[] = [
-        'cat_name' => $cat->name,
+        'name' => $cat->name,
         'email' => $cat->email,
-        'cat_image' => File::load($cat->image)->getFileUri(),
+        'image' => File::load($cat->image)->getFileUri(),
         'timestamp' => $cat->timestamp,
       ];
     }
   return $data;
   }
 }
-
-
-// get data from database
-//$query = \Drupal::database()->select('zin', 'm');
-//$query->fields('m', ['id', 'cat_name', 'email', 'cat_image', 'date']);

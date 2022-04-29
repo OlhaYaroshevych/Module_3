@@ -15,8 +15,8 @@ function zin_schema() {
         'unsigned' => TRUE,                         
         'not null' => TRUE,                         
       ],
-      'cat_name' => [
-        'description' => 'Name of the cat',
+      'name' => [
+        'description' => 'Cat\'s name',
         'type' => 'varchar',
         'length' => 32,
         'not null' => TRUE,
@@ -29,13 +29,14 @@ function zin_schema() {
         'not null' => TRUE,
         'default' => '',
       ],
-      'cat_image' => [
-        'type' => 'int',
+      'image' => [
+        'type' => 'varchar',
+        'length' => 255,
         'not null' => TRUE,
         'description' => 'Unique ID of the cat\'s image.',
       ],
       'timestamp' => [
-        'description' => 'Timestamp',
+        'description' => 'Submitting date',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -49,3 +50,18 @@ function zin_schema() {
 
   return $schema;
 }
+
+/*
+Delete the database table when removing the module
+*/
+function db_uninstall($is_syncing) {
+  $database = Drupal::database();
+  $result = $database->select('zin', 'z')
+    ->fields('z', ['image'])
+    ->execute();
+  foreach ($result as $row) {
+    if($row->image){
+      File::load($row->image)->delete();
+    } 
+  }
+} 
