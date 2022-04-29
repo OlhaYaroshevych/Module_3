@@ -57,7 +57,7 @@ class CatForm extends FormBase {
         'file_validate_extensions' => ['jpeg jpg png'],
         'file_validate_size' => [25600000],
       ],
-      '#upload_location' => 'public://images/',
+      '#upload_location' => 'public://',
     ];
     $form['actions']['#type'] = 'actions';
     $form['submit'] = [

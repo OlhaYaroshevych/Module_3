@@ -3,6 +3,8 @@ zin:
   js:
     js/zin.js: {}
   css:
+    base:
+      css/style.css: {}
     component:
       css/zin.css: {}
   dependencies:

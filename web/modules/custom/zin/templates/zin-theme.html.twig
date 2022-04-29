@@ -1,0 +1,43 @@
+{{ form }}
+
+{% if cats['table']['#rows'] %}
+  <div style="height: 800px;">
+    <table{{ attributes.addClass('table') }}>
+      {% if cats['table']['#header'] %}
+        <thead>
+          <tr>
+            {% for cell in cats['table']['#header'] %}
+              <td>{{ cell }}</td>
+            {% endfor %}
+          </tr>
+        </thead>
+      {% endif %}
+
+      <tbody>
+        {% for row in cats['table']['#rows'] %}
+          {% set row_classes = [
+            not no_striping ? cycle(['odd', 'even'], loop.index0),
+          ] %}
+          <tr{{ row.attributes.addClass(row_classes) }}>
+            <td>{{ row['name']}} </td>
+            <td>{{ row['email'] }}</td>
+            <td>
+              <div class="fix-size">
+                <a href="{{row['image'] }}" target="_blank">
+                  <img
+                    class="cat-image"
+                    src="{{row['image'] }}"
+                    alt="{{ row['name'] }}"
+                    width = "300px"
+                    height = "200px"
+                    title="{{ row['name'] }}"/>
+                </a>
+              </div>
+            </td>
+            <td>{{ row['timestamp']|date("d/m/y H:i:s")}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </div>
+{% endif %}

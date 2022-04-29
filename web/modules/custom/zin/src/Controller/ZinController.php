@@ -8,7 +8,6 @@
 namespace Drupal\zin\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\zin\Form\CatsForm;
 use Drupal\file\Entity\File;
 
 /**
@@ -21,9 +20,7 @@ class ZinController extends ControllerBase {
    */
   public function build() {
     $form = \Drupal::formBuilder()->getForm('Drupal\zin\Form\CatForm');
-    $build['content'] = [
-      '#form' => $form,      
-    ];
+    
     $build['header'] = [
       '#type' => 'markup',
       '#markup' => '<div class="process-heading">' . $this->t('Hello! You can add here a photo of your cat.') . '</div>',
@@ -39,7 +36,12 @@ class ZinController extends ControllerBase {
       '#header' => $heading,
       '#rows' => $this->getCatsInfo(),
     ];
-    return [$build['header'], $form, $cats];
+    $build['content'] = [
+      '#form' => $form, 
+      '#theme' => 'zin-theme',
+      '#cats' => $cats,     
+    ];
+    return $build;
   }
 
   public function getCatsInfo() {
@@ -47,15 +49,19 @@ class ZinController extends ControllerBase {
       ->fields('z', ['name', 'email', 'image', 'timestamp'])
       ->orderBy('id', 'DESC')
       ->execute();
-    $data = [];
+    $cats = [];
     foreach ($output as $cat) {
-      $data[] = [
+     $image = NULL;
+     if ($cat->image != $image) {
+        $image = File::load($cat->image)->createFileUrl(false);
+      }
+      $cats[] = [
         'name' => $cat->name,
         'email' => $cat->email,
-        'image' => File::load($cat->image)->getFileUri(),
-        'timestamp' => $cat->timestamp,
+        'image' => $image,
+         'timestamp' => date('Y-m-d h:m:s'),
       ];
     }
-  return $data;
+  return $cats;
   }
 }
