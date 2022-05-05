@@ -4,7 +4,6 @@
  * @file
  * Contains \Drupal\zin\Form\CatForm.
  */
-
 namespace Drupal\zin\Form;
 
 use Drupal\Core\Form\FormBase;
@@ -16,9 +15,12 @@ use Drupal\Core\Ajax\MessageCommand;
 use Drupal\file\Entity\File;
 
 class CatForm extends FormBase {
-  
+
   /**
    * {@inheritdoc}
+   * 
+   * Build form with fields.
+   * 
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['container'] = [
@@ -34,8 +36,8 @@ class CatForm extends FormBase {
     ];
     $form['email'] = [
       '#type' => 'email',
-      '#title' => $this -> t('Your e-mail:'),
-      '#description' => $this -> t('Please use only Latin letters, underscores or hyphens'),
+      '#title' => $this->t('Your e-mail:'),
+      '#description' => $this->t('Please use only Latin letters, underscores or hyphens'),
       '#required' => TRUE,
       '#ajax' => [
         'callback' => '::validateEmailAjax',
@@ -49,7 +51,7 @@ class CatForm extends FormBase {
     ];
     $form['image'] = [
       '#type' => 'managed_file',
-      '#title' => $this -> t('Upload image:'),
+      '#title' => $this->t('Upload image:'),
       '#name' => 'image',
       '#description' => $this->t('Only JPG, PNG and JPEG files are allowed. Size limit is 2MB'),
       '#required' => TRUE,
@@ -71,8 +73,8 @@ class CatForm extends FormBase {
         'progress' => [
           'type' => 'throbber',
           'message' => t('Adding the cat\'s name..'),
-        ],        
-      ],  
+        ],
+      ],
     ];
     return $form;
   }
@@ -84,19 +86,31 @@ class CatForm extends FormBase {
     return 'zin_catform_form';
   }
 
+  /**
+   * {@inheritdoc}
+   * 
+   * Validate name and image fields.
+   * 
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     if (strlen($form_state->getValue('name')) < 2) {
       $form_state->setErrorByName('name', $this->t('Name of the cat is too short.'));
     }
     if (strlen($form_state->getValue('name')) > 32) {
       $form_state->setErrorByName('name', $this->t('Name of the cat is too long.'));
-    }  
+    }
     $my_file = $form_state->getValue('image');
     if (empty($my_file)) {
       $form_state->setErrorByName('image', $this->t('No image found'));
     }
   }
 
+  /**
+   * {@inheritdoc}
+   * 
+   * Validate email.
+   * 
+   */
   protected function validateEmail(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
     $stableExpression = '/^[A-Za-z_\-]+@\w+(?:\.\w+)+$/';
@@ -107,8 +121,11 @@ class CatForm extends FormBase {
   }
 
   /**
-  * {@inheritdoc}
-  */
+   * {@inheritdoc}
+   * 
+   * Ajax validate email.
+   * 
+   */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $valid = $this->validateEmail($form, $form_state);
     $response = new AjaxResponse();
@@ -125,37 +142,46 @@ class CatForm extends FormBase {
     return $response;
   }
 
+  /**
+   * {@inheritdoc}
+   * 
+   * Submit form.
+   * 
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $image = $form_state->getValue('image');
-    //If the image is uploaded, save it in the database
+    //If the image is uploaded, save it in the database.
     if ($image) {
       $file = File::load($image[0]);
       $file->setPermanent();
       $file->save();
     }
-    //Database connection
+    //Database connection.
     $database = \Drupal::database();
     $database->insert('zin')
-    ->fields([
-      'name' => $form_state->getValue('name'),
-      'email' => $form_state->getValue('email'),
-      'image' => $image[0],
-    ])
+      ->fields([
+        'name' => $form_state->getValue('name'),
+        'email' => $form_state->getValue('email'),
+        'image' => $image[0],
+      ])
       ->execute();
   }
-  
+
   /**
    * {@inheritdoc}
+   * 
+   * Ajax submit form.
+   * 
    */
   public function submitAjax(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
-    // Modal message about errors in form
+    // Modal message about errors in form.
     if ($form_state->getErrors()) {
       foreach ($form_state->getErrors() as $err) {
         $response->addCommand(new MessageCommand($err, NULL, ['type' => 'error']));
       }
       $form_state->clearErrors();
-    }  
+    }
     // Modal message about successful data save.
     else {
       $response->addCommand(new MessageCommand($this->t('Name of the cat was added!'), NULL, ['type' => 'status'], TRUE));

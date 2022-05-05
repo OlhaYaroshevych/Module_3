@@ -14,3 +14,24 @@ zin.settings_form:
   requirements:
     _permission: 'administer zin configuration'
 
+zin.content:
+  path: "/zin/cats/{id}/delete"
+  defaults:
+    _form: '\Drupal\zin\Form\DeleteForm'
+  requirements:
+    _permission: 'administer'
+
+zinedit.content:
+  path: "/zin/cats/{id}/edit"
+  defaults:
+    _form: '\Drupal\zin\Form\EditForm'
+  requirements:
+    _permission: 'administer'
+
+zinadmin.content:
+  path: '/admin/structure/cats'
+  defaults:
+    _title: 'list cats'
+    _form: '\Drupal\zin\Form\AdminForm'
+  requirements:
+    _permission: 'administer'

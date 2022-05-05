@@ -1,0 +1,29 @@
+reviewer.content:
+  path: '/reviewer/feedback'
+  defaults:
+    _form: '\Drupal\reviewer\Form\ReviewForm'	
+    _controller: '\Drupal\reviewer\Controller\ReviewerController::build'
+  requirements:
+    _permission: 'access content'
+
+reviewer.settings_form:
+  path: '/admin/config/system/reviewer'
+  defaults:
+    _title: 'reviewer settings'
+    _form: 'Drupal\reviewer\Form\SettingsForm'
+  requirements:
+    _permission: 'administer reviewer configuration'
+
+reviewerdelete.content:
+  path: "/reviewer/feedback/{id}/delete"
+  defaults:
+    _form: '\Drupal\reviewer\Form\ReviewerDeleteForm'
+  requirements:
+    _permission: 'administer'
+
+revieweredit.content:
+  path: "/reviewer/feedback/{id}/edit"
+  defaults:
+    _form: '\Drupal\reviewer\Form\ReviewerEditForm'
+  requirements:
+    _permission: 'administer'

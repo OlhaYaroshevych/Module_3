@@ -1,0 +1,6 @@
+reviewer.settings_form:
+  title: reviewer
+  description: Configure reviewer.
+  parent: system.admin_config_system
+  route_name: reviewer.settings_form
+  weight: 10

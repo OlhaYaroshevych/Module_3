@@ -1,0 +1,98 @@
+{{ form }}
+
+{% if reviews['table']['#rows'] %}
+  <div style="height: auto;">
+    <table{{ attributes.addClass('table') }}>
+      {% if reviews['table']['#header'] %}
+        <thead>
+          <tr>
+            {% for cell in reviews['table']['#header'] %}
+              <td>{{ cell }}</td>
+            {% endfor %}
+          </tr>
+        </thead>
+      {% endif %}
+
+      <tbody>
+        {% for row in reviews['table']['#rows'] %}
+          {% set row_classes = [
+            not no_striping ? cycle(['odd', 'even'], loop.index0),
+          ] %}
+          <tr{{ row.attributes.addClass(row_classes) }}>
+            <td>
+              <div class="fix-size">
+                {% if row['user_image'] %}
+                  <a href="{{ row['user_image'] }}" target="_blank">
+                    <img
+                      class="user-image"
+                      src="{{ row['user_image'] }}"
+                      alt="{{ row['name'] }}"
+                      width = "150px"
+                      height = "150px"
+                      style = "border-radius: 50px"
+                      title="{{ row['name'] }}"/>
+                  </a>
+                {% else %}
+                  <img
+                    class="default-user-image user-image"
+                    src="/modules/custom/reviewer/images/user_image/default.jpg"
+                    alt="{{ row['name'] }}"
+                    width = "150px"
+                    height = "150px"
+                    style = "border-radius: 50px"
+                    title="{{ row['name'] }}"/> 
+                {% endif %}
+              </div>
+            </td>
+            <td class="user-name">{{ row['name'] }}</td>
+            <td class="submit-date">{{ row['timestamp']|date("m/d/y H:i:s")}}</td>
+            <td class="user-message">{{ row['message'] }}</td>
+            <td>
+              <div class="fix-size">
+                {% if row['image'] %}
+                  <a href="{{ row['image'] }}" target="_blank">
+                    <img
+                      class="image"
+                      src="{{ row['image'] }}"
+                      alt="{{ row['name'] }}"
+                      width = "300px"
+                      height = "200px"
+                      title="{{ row['name'] }}"/>
+                  </a>
+                {% endif %}
+              </div>
+            </td>
+            <td class="user-email">{{ row['email'] }}</td>
+            <td class="user-phone">{{ row['phone'] }}</td>
+             {% if 'administrator' in user.getroles %}
+              <td>
+                <div class="option-links">
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-lg use-ajax delete"
+                    href="{{ path('reviewerdelete.content', {'id': row['id']}) }}"
+                    data-dialog-options="{&quot;width&quot;:400}"
+                    data-dialog-type="modal">
+                    Delete
+                  </button>
+                </div>
+              </td>
+               <td>
+                <div class="option-links">
+                   <button
+                    type="button"
+                    class="btn btn-outline-success btn-lg use-ajax edit"
+                    href="{{ path('revieweredit.content', {'id': row['id']}) }}"
+                    data-dialog-options="{&quot;width&quot;:400}"
+                    data-dialog-type="modal">
+                    Edit
+                  </button>
+                </div>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </div>
+{% endif %}

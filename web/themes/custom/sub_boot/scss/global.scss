@@ -61,6 +61,8 @@ div.process-heading {
 
 #edit-name--description, #edit-email--description, #edit-image--description {
     color: white !important;
+    font-size: 20px;
+    float: right;
 }
 
 div.email-validation-message {
@@ -73,4 +75,36 @@ fieldset.form-type-email {
 
 .messages__wrapper {
     font-weight: bold;
+}
+
+.ui-widget-overlay {
+    position: relative !important;
+}
+
+.ui-widget-overlay {
+    opacity: 0.3;
+}
+
+.ui-dialog {
+    border-radius: 10px;
+}
+
+#drupal-modal {
+    font-family: 'Square Peg';
+    button, button.ui-dialog-buttonset {
+        font-size: 20px;
+        font-weight: bold;
+        border: 1px solid;
+        font-family: 'Square Peg';
+    }
+    fieldset {
+        label {
+            font-size: 25px;
+            font-weight: bold;
+        }
+        input {
+            font-family: 'Square Peg';
+            font-size: 25px;
+        }
+    }
 }

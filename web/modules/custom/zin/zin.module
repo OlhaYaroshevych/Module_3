@@ -13,9 +13,9 @@ function zin_theme($existing, $type, $theme, $path) {
   return [
     'zin-theme' => [
       'variables' => [
-          'form' => NULL,
-          'cats' => NULL,
-          ],
+        'form' => NULL,
+        'cats' => NULL,
+      ],
     ],
   ];
 }

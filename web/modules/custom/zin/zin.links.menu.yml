@@ -4,3 +4,10 @@ zin.settings_form:
   parent: system.admin_config_system
   route_name: zin.settings_form
   weight: 10
+
+zin.admin:
+  title: 'Cats list'
+  description: 'This module creates a page with a list of cats and a form where users can leave photos of their pets.'
+  parent: system.admin_structure
+  route_name: zinadmin.content
+  weight: 100

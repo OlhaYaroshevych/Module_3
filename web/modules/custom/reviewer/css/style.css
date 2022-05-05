@@ -1,0 +1,43 @@
+.process-heading::before {
+    display: none;
+}
+
+.process-heading::after {
+    content: "\270D";
+    margin-left: 10px;
+}
+
+form.reviewer-reviewform-form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#edit-phone, #edit-message, #edit-user-image-upload {
+    font-size: 25px;
+}
+#edit-user-image--description {
+    color: white !important;
+    font-size: 20px;
+    float: right;
+}
+
+button#edit-submit {
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    width: 60%;
+} 
+ 
+button#edit-submit::after {
+    content: "\1F58A";
+    margin-left: 10px;
+    margin-top: 3px;
+} 
+
+button#edit-submit::before {
+    content: "\1F58A";
+    margin-left: 10px;
+    margin-top: 3px;
+    opacity: 0;
+} 

@@ -6,14 +6,14 @@ use Drupal\file\Entity\File;
  * Implements hook_schema().
  */
 function zin_schema() {
-  $schema['zin'] = [                   
-    'description' => 'Cat info database',            
-    'fields' => [                              
-      'id' => [                                
-        'description' => 'Primary Key: Unique record ID.',                      
-        'type' => 'serial',                         
-        'unsigned' => TRUE,                         
-        'not null' => TRUE,                         
+  $schema['zin'] = [
+    'description' => 'Cat info database',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: Unique record ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
       ],
       'name' => [
         'description' => 'Cat\'s name',
@@ -51,17 +51,18 @@ function zin_schema() {
   return $schema;
 }
 
-/*
-Delete the database table when removing the module
-*/
+/**
+ * Delete the database table when removing the module.
+ */
 function db_uninstall($is_syncing) {
   $database = Drupal::database();
   $result = $database->select('zin', 'z')
     ->fields('z', ['image'])
     ->execute();
   foreach ($result as $row) {
-    if($row->image){
+    if ($row->image) {
       File::load($row->image)->delete();
-    } 
+    }
   }
-} 
+
+}

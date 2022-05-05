@@ -1,0 +1,79 @@
+<?php
+
+use Drupal\file\Entity\File;
+
+/**
+ * Implements hook_schema().
+ */
+function reviewer_schema() {
+  $schema['reviewer'] = [                   
+    'description' => 'Review database',            
+    'fields' => [                              
+      'id' => [                                
+        'description' => 'Primary Key: Unique record ID.',                      
+        'type' => 'serial',                         
+        'unsigned' => TRUE,                         
+        'not null' => TRUE,                         
+      ],
+      'name' => [
+        'description' => 'User name',
+        'type' => 'varchar',
+        'length' => 100,
+      ],
+      'email' => [
+        'description' => 'User email',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'phone' => [
+        'description' => 'User phone number',
+        'type' => 'varchar',
+        'length' => 18,
+      ],
+      'message' => [
+        'description' => 'Feedback message',
+        'type' => 'text',
+      ],
+      'user_image' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Unique ID of the user profile picture.',
+      ],
+      'image' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Unique ID of the user image.',
+      ],
+      'timestamp' => [
+        'description' => 'Submitting date',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => [
+      'id',
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Delete the database table when removing the module.
+ */
+function db_uninstall($is_syncing) {
+  $database = Drupal::database();
+  $result = $database->select('reviewer', 'r')
+    ->fields('r', ['user_image', 'image'])
+    ->execute();
+  foreach ($result as $row) {
+    if($row->user_image){
+      File::load($row->user_image)->delete();
+    } 
+    if($row->image){
+      File::load($row->image)->delete();
+    } 
+  }
+} 
