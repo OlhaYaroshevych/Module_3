@@ -21,6 +21,9 @@ class ReviewerEditForm extends ReviewForm {
 
   /**
    * {@inheritdoc}
+   * 
+   * Get form ID
+   * 
    */
   public function getFormId() : string {
     return "reviewer_edit_form";
@@ -117,6 +120,12 @@ class ReviewerEditForm extends ReviewForm {
     return $response;
   }
 
+    /**
+   * {@inheritdoc}
+   * 
+   * Form validation.
+   * 
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $valid = $this->validatePhone($form, $form_state);
     $email = $form_state->getValue('email');
@@ -197,18 +206,6 @@ class ReviewerEditForm extends ReviewForm {
     elseif ($this->response->image) {
       File::load($this->response->image)->delete();
     }
-    // if ($edited['user_image'] != $this->review->user_image) {
-    //   $file = File::load($edited['user_image']);
-    //   $file->setPermanent();
-    //   $file->save();
-    //   File::load($this->review->user_image)->delete(); 
-    // }
-    // if ($edited['image'] != $this->review->image) {
-    //   $file = File::load($edited['image']);
-    //   $file->setPermanent();
-    //   $file->save();
-    //   File::load($this->review->image)->delete(); 
-    // }
     $edited = [
       'name' => $form_state->getValue('name'),
       'email' => $form_state->getValue('email'),

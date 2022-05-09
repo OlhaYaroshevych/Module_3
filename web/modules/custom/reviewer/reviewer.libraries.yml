@@ -10,11 +10,6 @@ reviewer-css:
   css:
     theme:
       css/style.css: { }
-# Telephone Number Input Mask
-phonemask:
-  js:
-    js/phonemask.js: { }
-    js/phonemask.min.js: { }
 
 # Third-party library (self hosted).
 jquery-labelauty:

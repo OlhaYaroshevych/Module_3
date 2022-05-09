@@ -12,14 +12,13 @@
           </tr>
         </thead>
       {% endif %}
-
       <tbody>
         {% for row in reviews['table']['#rows'] %}
           {% set row_classes = [
             not no_striping ? cycle(['odd', 'even'], loop.index0),
           ] %}
           <tr{{ row.attributes.addClass(row_classes) }}>
-            <td>
+            <td class="personal-info">
               <div class="fix-size">
                 {% if row['user_image'] %}
                   <a href="{{ row['user_image'] }}" target="_blank">
@@ -43,11 +42,11 @@
                     title="{{ row['name'] }}"/> 
                 {% endif %}
               </div>
+              <div class="user-name">{{ row['name'] }}</div>
+              <div class="submit-date">{{ row['timestamp']|date("m/j/Y H:i:s")}}</div>
             </td>
-            <td class="user-name">{{ row['name'] }}</td>
-            <td class="submit-date">{{ row['timestamp']|date("m/d/y H:i:s")}}</td>
-            <td class="user-message">{{ row['message'] }}</td>
-            <td>
+            <td class="feedback-message">
+              <div class="user-message">{{ row['message'] }}</div>
               <div class="fix-size">
                 {% if row['image'] %}
                   <a href="{{ row['image'] }}" target="_blank">
@@ -55,18 +54,21 @@
                       class="image"
                       src="{{ row['image'] }}"
                       alt="{{ row['name'] }}"
-                      width = "300px"
-                      height = "200px"
+                      width = "200px"
+                      height = "125px"
+                      style = "border-radius: 10px"
                       title="{{ row['name'] }}"/>
                   </a>
                 {% endif %}
               </div>
             </td>
-            <td class="user-email">{{ row['email'] }}</td>
-            <td class="user-phone">{{ row['phone'] }}</td>
+            <td class="contact-info">
+              <div class="user-email">{{ row['email'] }}</div>
+              <div class="user-phone">{{ row['phone'] }}</div>
+            </td>
              {% if 'administrator' in user.getroles %}
-              <td>
-                <div class="option-links">
+              <td class="option-links">
+                <div>
                   <button
                     type="button"
                     class="btn btn-outline-danger btn-lg use-ajax delete"
@@ -76,9 +78,7 @@
                     Delete
                   </button>
                 </div>
-              </td>
-               <td>
-                <div class="option-links">
+                <div>
                    <button
                     type="button"
                     class="btn btn-outline-success btn-lg use-ajax edit"

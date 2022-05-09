@@ -41,3 +41,42 @@ button#edit-submit::before {
     margin-top: 3px;
     opacity: 0;
 } 
+
+table.table {
+    border-bottom: transparent;
+}
+
+thead {
+    font-weight: bold;
+}
+
+td {
+    text-align: center;
+}
+
+div.submit-date {
+    font-size: 25px;
+    margin-top: -10px;
+}
+
+div.user-name {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+div.user-message {
+    text-align: justify;
+}
+
+td.feedback-message {
+    width: 50%;
+}
+
+td.option-links {
+    width: 10%;
+}
+
+td.option-links > div > button {
+    width: 100%;
+    margin-bottom: 15px;
+}

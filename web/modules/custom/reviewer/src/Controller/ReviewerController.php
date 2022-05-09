@@ -25,16 +25,9 @@ class ReviewerController extends ControllerBase {
       '#markup' => '<div class="process-heading">' . $this->t('Got feedback? We\'d love to hear it!') . '</div>',
     ];
     $heading = [
-      'user_image' => t('Profile photo'),
-      'name' => t('Name'),
-      'timestamp' => t('Submitting date'),
-      'message' => t('Feedback'),
-      'image' => t('Image'),
-      'email' => t('E-mail'),
-      'phone' => t('Phone number'),
-      // 'user_image' => t('Personal Info'),
-      // 'message' => t('Feedback message'),
-      // 'email' => t('Contact Info'),
+      'user_image' => t('Personal Info'),
+      'message' => t('Feedback message'),
+      'email' => t('Contact Info'),
     ];
     $reviews['table'] = [
       '#type' => 'table',
@@ -85,7 +78,7 @@ class ReviewerController extends ControllerBase {
         'message' => $review->message,
         'user_image' => $user_image,
         'image' => $image,
-        'timestamp' => $review->timestamp,
+        'timestamp' => date("m/j/Y H:i:s"),
       ];
     }
   return $reviews;

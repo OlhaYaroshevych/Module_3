@@ -61,14 +61,6 @@ class ReviewForm extends FormBase {
           'message' => t('Veryfying phone number..'),
         ],
       ],
-      // '#attached' => [
-      //   'library' => [
-      //     'reviewer/phonemask',
-      //   ],
-      // ],
-      // '#attributes' => [
-      //   'phonemask' => "'mask': '+380(99)-999-99-99'",
-      // ],
       '#suffix' => '<div class="phone-validation-message"></div>'
     ];
     $form['message'] = [
@@ -119,6 +111,9 @@ class ReviewForm extends FormBase {
 
   /**
    * {@inheritdoc}
+   * 
+   * Get form ID
+   * 
    */
   public function getFormId() {
     return 'reviewer_reviewform_form';

@@ -36,9 +36,7 @@ class ReviewerDeleteForm extends ConfirmFormBase {
    * Submit form.
    * 
    */
-public function submitForm(array &$form, FormStateInterface $form_state) {
-    // $user_image = $form_state->getValue('user_image');
-    // $image = $form_state->getValue('image');
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     //Database connection
     $database = \Drupal::database();
     // Delete a user_image from the database
