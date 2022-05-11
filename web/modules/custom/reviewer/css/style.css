@@ -80,3 +80,19 @@ td.option-links > div > button {
     width: 100%;
     margin-bottom: 15px;
 }
+
+div.ui-dialog-buttonset > button.ui-button {
+    font-family: 'Square Peg';
+    font-size: 20px;
+    font-weight: bold;
+    border: 1px solid;
+}
+
+form.reviewer-delete-form {
+    font-size: 20px;
+}
+
+span.ui-dialog-title {
+    font-family: 'Square Peg';
+    font-size: 30px;
+}

@@ -235,6 +235,7 @@ class ReviewForm extends FormBase {
       'message' => $form_state->getValue('message'),
       'user_image' => $user_image[0],
       'image' => $image[0],
+      'timestamp' => date('m/j/Y H:i:s',  strtotime('+3 hour')),
     ])
       ->execute();
   }

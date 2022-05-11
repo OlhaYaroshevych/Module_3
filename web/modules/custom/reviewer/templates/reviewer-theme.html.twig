@@ -43,7 +43,7 @@
                 {% endif %}
               </div>
               <div class="user-name">{{ row['name'] }}</div>
-              <div class="submit-date">{{ row['timestamp']|date("m/j/Y H:i:s")}}</div>
+              <div class="submit-date">{{ row['timestamp']|date('m/j/Y H:i:s') }}</div>
             </td>
             <td class="feedback-message">
               <div class="user-message">{{ row['message'] }}</div>

@@ -46,10 +46,10 @@ function reviewer_schema() {
       ],
       'timestamp' => [
         'description' => 'Submitting date',
-        'type' => 'int',
-        'unsigned' => TRUE,
+        'type' => 'varchar',
+        'length' => 255,
         'not null' => TRUE,
-        'default' => 0,
+        'default' => '',
       ],
     ],
     'primary key' => [
