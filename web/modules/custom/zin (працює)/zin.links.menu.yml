@@ -1,0 +1,9 @@
+entity.zin_contact.collection:
+  title: 'Zin'
+  route_name: entity.zin_contact.collection
+  description: 'List contacts'
+zin_contact.admin.structure.settings:
+  title: 'Contact settings'
+  description: 'Configure contact entity'
+  route_name:  zin.contact_settings
+  parent: system.admin_structure

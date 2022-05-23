@@ -1,6 +1,9 @@
 name: zin
 type: module
-description: This module creates a page with a list of cats and a form where users can leave photos of their pets.
-package: Custom
-core: 8.x
+description: Demonstrates how to create a zin entity.
+package: Example modules
 core_version_requirement: ^8 || ^9
+# These modules are required by the tests, must be available at bootstrap time
+dependencies:
+  - drupal:text
+  - drupal:telephone

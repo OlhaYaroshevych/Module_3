@@ -1,37 +1,67 @@
-zin.cats:
-  path: '/zin/cats'
-  defaults:
-    _form: '\Drupal\zin\Form\CatForm'	
-    _controller: '\Drupal\zin\Controller\ZinController::build'
-  requirements:
-    _permission: 'access content'
+# This file brings everything together. Very nifty!
 
-zin.settings_form:
-  path: '/admin/config/system/zin'
+# Route name can be used in several places; e.g. links, redirects, and local
+# actions.
+entity.zin_review.canonical:
+  path: '/zin_review/{zin_review}'
   defaults:
-    _title: 'zin settings'
-    _form: 'Drupal\zin\Form\SettingsForm'
+    # Calls the view controller, defined in the annotation of the review
+    # entity. This marks this route as belonging to this entity type.
+    _entity_view: 'zin_review'
+    _title: 'Review content'
   requirements:
-    _permission: 'administer zin configuration'
+    # Calls the access controller of the entity, passing in the suffix ('view')
+    # as the $operation parameter to checkAccess().
+    _entity_access: 'zin_review.view'
 
-zin.content:
-  path: "/zin/cats/{id}/delete"
+entity.zin_review.collection:
+  path: '/zin_review/list'
   defaults:
-    _form: '\Drupal\zin\Form\DeleteForm'
+  # Calls the list controller, defined in the annotation of the review entity.
+    _entity_list: 'zin_review'
+    _title: 'Review list'
   requirements:
-    _permission: 'administer'
+  # Checks for permission directly.
+    _permission: 'view review entity'
 
-zinedit.content:
-  path: "/zin/cats/{id}/edit"
+zin.review_add:
+  path: '/zin_review/add'
   defaults:
-    _form: '\Drupal\zin\Form\EditForm'
+    # Calls the form.add controller, defined in the review entity.
+    _entity_form: zin_review.default
+    _title: 'Add review'
   requirements:
-    _permission: 'administer'
+    # Use the entity's access controller. _entity_create_access tells the router
+    # to use the access controller's checkCreateAccess() method instead of
+    # checkAccess().
+    _entity_create_access: 'zin_review'
 
-zinadmin.content:
-  path: '/admin/structure/cats'
+entity.zin_review.edit_form:
+  path: '/zin_review/{zin_review}/edit'
   defaults:
-    _title: 'list cats'
-    _form: '\Drupal\zin\Form\AdminForm'
+  # Calls the form.edit controller, defined in the review entity.
+    _entity_form: zin_review.default
+    _title: 'Edit review'
   requirements:
-    _permission: 'administer'
+    # Calls the access controller of the entity, passing in the suffix
+    # ('update') as the $operation parameter to checkAccess().
+    _entity_access: 'zin_review.update'
+
+entity.zin_review.delete_form:
+  path: '/review/{zin_review}/delete'
+  defaults:
+    # Calls the form.delete controller, defined in the review entity.
+    _entity_form: zin_review.delete
+    _title: 'Delete review'
+  requirements:
+    # Calls the access controller of the entity, passing in the suffix
+    # ('delete') as the $operation parameter to checkAccess().
+    _entity_access: 'zin_review.delete'
+
+zin.review_settings:
+  path: '/admin/structure/zin_review_settings'
+  defaults:
+    _form: '\Drupal\zin\Form\ReviewSettingsForm'
+    _title: 'Review settings'
+  requirements:
+    _permission: 'administer review entity'
