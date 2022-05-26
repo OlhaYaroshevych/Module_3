@@ -1,0 +1,9 @@
+entity.zin_review.collection:
+  title: 'Zin'
+  route_name: entity.zin_review.collection
+  description: 'List reviews'
+zin_review.admin.structure.settings:
+  title: 'Review settings'
+  description: 'Configure review entity'
+  route_name:  zin.review_settings
+  parent: system.admin_structure

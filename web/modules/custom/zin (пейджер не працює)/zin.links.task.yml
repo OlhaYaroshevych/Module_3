@@ -1,0 +1,20 @@
+review.settings_tab:
+  route_name: zin.review_settings
+  title: Settings
+  base_route: zin.review_settings
+
+review.view:
+  route_name: entity.zin_review.canonical
+  base_route: entity.zin_review.canonical
+  title: View
+
+review.page_edit:
+  route_name: entity.zin_review.edit_form
+  base_route: entity.zin_review.canonical
+  title: Edit
+
+review.delete_confirm:
+  route_name:  entity.zin_review.delete_form
+  base_route:  entity.zin_review.canonical
+  title: Delete
+  weight: 10

@@ -1,0 +1,7 @@
+zin.review_add:
+  route_name: zin.review_add
+  title: 'Add review'
+
+  appears_on:
+    - entity.zin_review.collection
+    - entity.zin_review.canonical

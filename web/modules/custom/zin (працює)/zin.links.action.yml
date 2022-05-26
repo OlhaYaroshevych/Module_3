@@ -1,7 +1,0 @@
-zin.contact_add:
-  route_name: zin.contact_add
-  title: 'Add contact'
-
-  appears_on:
-    - entity.zin_contact.collection
-    - entity.zin_contact.canonical

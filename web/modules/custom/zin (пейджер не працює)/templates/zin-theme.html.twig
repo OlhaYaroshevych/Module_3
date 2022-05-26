@@ -1,0 +1,45 @@
+
+<article{{ attributes }}>
+  {{ title_suffix }}
+  <div class="user-info">
+    {{ content.name }}
+    {% if content.user_image[0] %}
+     <a href="{{ content.user_image[0] }}" target="_blank">
+                    <img
+                      class="user-image"
+                      src="{{ content.user_image[0] }}"
+                      alt="{{ content.name[0]['#context']['value'] }}"
+                      width = "150"
+                      height = "150"
+                      style = "border-radius: 50px"
+                      title="{{ content.name[0]['#context']['value'] }}">
+      </a>
+    {% else %}
+      <img
+              class="img-fluid image-style-thumbnail"
+              src="/modules/custom/zin/images/user_image/default.jpg"
+              width = "150"
+              height = "150"
+              style = "border-radius: 50px"
+              alt="default user_image"
+              title={{ content.name[0]['#context']['value'] }}
+      />
+    {% endif %}
+    {{ content.created }}   
+  </div>
+  <div class="feedback-message">
+    {{ content.message }}
+    {% if content.image[0] %}
+      {{ content.image[0] }}
+    {% endif %}
+  </div>
+  <div class="contact-info">
+    {{ content.email }}
+    {{ content.phone }}
+  </div>
+  {# <div class="option-links">
+    {% if '/zinzin_review/1/' in url %}
+    <a class="btn btn-primary rounded-sm" href="/zin_review" title="{{ 'Go to form page'|t }}" rel="next">Return to form</a>
+    {% endif %}
+  </div> #}
+</article> 

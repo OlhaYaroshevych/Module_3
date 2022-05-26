@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\zin\ReviewInterface;
 use Drupal\user\UserInterface;
 use Drupal\Core\Entity\EntityChangedTrait;
+use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
  * Defines the Zin entity.
@@ -216,7 +217,15 @@ class Review extends ContentEntityBase implements ReviewInterface {
         'max_length' => 100,
         'text_processing' => 0,
       ])
-      // Set no default value.
+      ->setPropertyConstraints('value', [
+        'Length' => [
+          'min' => 2,
+          'max' => 100,
+          'minMessage' => t('Min name length is 2 characters.'),
+          'maxMessage' => t('Max name length is 100 characters.'),       
+        ],
+      ])
+      ->setRequired(TRUE)
       ->setDefaultValue(NULL)
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -230,106 +239,151 @@ class Review extends ContentEntityBase implements ReviewInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-      $fields['email'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Your e-mail'))
-      // ->setDescription(t('The first name of the Review entity.'))
-      ->setSettings([
-        'max_length' => 255,
-        'text_processing' => 0,
-      ])
-      // Set no default value.
-      ->setDefaultValue(NULL)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -5,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'string_email',
-        'weight' => -5,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+    // Email field for the review.  
+    $fields['email'] = BaseFieldDefinition::create('email')
+    ->setLabel(t('Your e-mail'))
+    ->setSettings([
+      'max_length' => 255,
+      'text_processing' => 0,
+    ])
+    ->setPropertyConstraints('value', [
+      'Regex' => [
+        'pattern' => '/^[A-Za-z_\-]+@\w+(?:\.\w+)+$/',
+        'message' => t('E-mail is not valid. Please, use only latin letters'),
+      ],
+    ])
+    ->setRequired(TRUE)
+    ->setDefaultValue(NULL)
+    ->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'email_mailto',
+      'weight' => -5,
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'email_default',
+      'weight' => -5,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
 
-    $fields['message'] = BaseFieldDefinition::create('string')
+    // Phone field for the review.
+    $fields['phone'] = BaseFieldDefinition::create('telephone')
+    ->setLabel(t('Your phone number'))
+    ->setDescription(t('Note that only digits allowed.'))
+    ->setSettings([
+      'max_length' => 10,
+      'text_processing' => 0,
+    ])
+    ->setPropertyConstraints('value', [
+      'Regex' => [
+        'pattern' => '/^0[0-9]{9}$/',
+        'message' => t('Phone number is not valid. Please, use only digits'),
+      ],
+    ])
+    ->setRequired(TRUE)
+    ->setDefaultValue(NULL)
+    ->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'telephone_link',
+      'weight' => -5,
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'telephone_default',
+      'weight' => -5,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);  
+    
+    // Feedback field for the review.
+    $fields['message'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Your message'))
-      // ->setDescription(t('The first name of the Review entity.'))
       ->setSettings([
         'max_length' => 600,
         'text_processing' => 0,
       ])
-      // Set no default value.
+      ->setRequired(TRUE)
       ->setDefaultValue(NULL)
       ->setDisplayOptions('view', [
         'label' => 'above',
-        'type' => 'string',
+        'type' => 'text_default',
         'weight' => -5,
       ])
       ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
+        'type' => 'string_textarea',
         'weight' => -5,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    // Owner field of the review.
-    // Entity reference field, holds the reference to the user object.
-    // The view shows the user name field of the user.
-    // The form presents a auto complete field for the user name.
-    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('User Name'))
-      ->setDescription(t('The Name of the associated user.'))
-      ->setSetting('target_type', 'user')
-      ->setSetting('handler', 'default')
+    // User_image field for the review.
+    $fields['user_image'] = BaseFieldDefinition::create('image')
+      ->setLabel(t('Your photo'))
+      ->setDefaultValue(NULL)
       ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'author',
-        'weight' => -3,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
+        'label' => 'hidden',
+        'type' => 'image',
         'settings' => [
-          'match_operator' => 'CONTAINS',
-          'match_limit' => 10,
-          'size' => 60,
-          'placeholder' => '',
+          'image_link' => 'file',
+          'image_style' => 'thumbnail',
         ],
-        'weight' => -3,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    // Role field for the review.
-    // The values shown in options are 'administrator' and 'user'.
-    $fields['role'] = BaseFieldDefinition::create('list_string')
-      ->setLabel(t('Role'))
-      ->setDescription(t('The role of the Review entity.'))
-      ->setSettings([
-        'allowed_values' => [
-          'administrator' => 'administrator',
-          'user' => 'user',
-        ],
-      ])
-      // Set the default value of this field to 'user'.
-      ->setDefaultValue('user')
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -2,
+        'weight' => -5,
       ])
       ->setDisplayOptions('form', [
-        'type' => 'options_select',
-        'weight' => -2,
+        'type' => 'image',
+        'weight' => -5,
+      ])
+      ->setSettings([
+        'alt_field' => FALSE,
+        'max_filesize' => 2097152,
+        'file_extensions' => 'jpeg jpg png',
+        'file_directory' => 'zin/user_images',
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
+      
+    // Feedback image field for the review.
+    $fields['image'] = BaseFieldDefinition::create('image')
+      ->setLabel(t('Image'))
+      ->setDefaultValue(NULL)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'image',
+        'settings' => [
+          'image_link' => 'file',
+          'image_style' => 'large',
+        ],
+        'weight' => -5,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'image',
+        'weight' => -5,
+      ])
+      ->setSettings([
+        'alt_field' => FALSE,
+        'max_filesize' => 5242880,
+        'file_extensions' => 'jpeg jpg png',
+        'file_directory' => 'zin/images',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);    
 
-    $fields['langcode'] = BaseFieldDefinition::create('language')
-      ->setLabel(t('Language code'))
-      ->setDescription(t('The language code of Zin entity.'));
     $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
+      ->setLabel(t('Date'))
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'timestamp',
+        'settings' => [
+          'date_format' => 'custom',
+          'custom_date_format' => 'm/j/Y H:i:s',
+        ],
+        'weight' => 20,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'datetime_timestamp',
+        'weight' => 20,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);;
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))

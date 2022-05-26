@@ -58,11 +58,17 @@ class ReviewListBuilder extends EntityListBuilder {
    */
   public function render() {
     $build['description'] = [
-      '#markup' => $this->t('Here is what others have said. <br> If you are an administartor, you can manage the fields on the <a href="@adminlink">Reviews admin page</a>.', [
-        '@adminlink' => $this->urlGenerator->generateFromRoute('zin.review_settings'),
-      ]),
+      '#markup' => $this->t('<div class="text-slogan">Here is what others have said.</div>'),
     ];
     $build['table'] = parent::render();
+    $build['content'] = [ 
+      '#theme' => 'zin-theme',
+      '#attached' => [
+        'library' => [
+          'zin/zin-css',
+        ]
+      ],
+    ];
     return $build;
   }
 
@@ -77,12 +83,11 @@ class ReviewListBuilder extends EntityListBuilder {
   public function buildHeader() {
     $header['name'] = $this->t('User name');
     $header['user_image'] = $this->t('User photo');
-    $header['date'] = $this->t('Review date');
-    $header['user_image'] = $this->t('User photo');
+    $header['created'] = $this->t('Review date');
     $header['message'] = $this->t('Feedback message');
     $header['image'] = $this->t('Feedback image');
     $header['email'] = $this->t('E-mail');
-    $header['phone'] = $this->t('Phone number');
+    $header['phone'] = $this->t('Phone');
     return $header + parent::buildHeader();
   }
 
@@ -91,11 +96,16 @@ class ReviewListBuilder extends EntityListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     /* @var $entity \Drupal\zin\Entity\Review */
-    $row['id'] = $entity->id();
+    // $row['id'] = $entity->id();
     $row['name'] = $entity->toLink()->toString();
-    $row['first_name'] = $entity->first_name->value;
-    $row['role'] = $entity->role->value;
+    $row['user_image']['data'] = $entity->get('user_image')->view(['label' => 'hidden']);
+    $row['created']['data'] = $entity->get('created')->view(['label' => 'hidden']);
+    $row['message'] = $entity->message->value;
+    $row['image']['data'] = $entity->get('image')->view(['label' => 'hidden']);
+    $row['email']['data'] = $entity->get('email')->view(['label' => 'hidden']);
+    $row['phone']['data'] = $entity->get('phone')->view(['label' => 'hidden']);  
     return $row + parent::buildRow($entity);
   }
 
 }
+

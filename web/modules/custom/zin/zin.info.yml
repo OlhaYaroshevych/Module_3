@@ -3,7 +3,6 @@ type: module
 description: Demonstrates how to create a zin entity.
 package: Example modules
 core_version_requirement: ^8 || ^9
-# These modules are required by the tests, must be available at bootstrap time
 dependencies:
   - drupal:text
   - drupal:telephone
