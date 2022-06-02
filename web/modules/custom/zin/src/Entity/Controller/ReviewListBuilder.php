@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ReviewListBuilder extends EntityListBuilder {
 
+  protected $limit = 5;
+
   /**
    * The url generator.
    *
